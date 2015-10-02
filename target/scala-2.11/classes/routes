@@ -1,0 +1,14 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET     /                           controllers.Application.index()
+
+# Workorders
+GET     /workorders/find/:id                          controllers.Workorders.find(id: Long)
+GET     /workorders/counts                            controllers.Workorders.counts
+
+# Assets
+GET     /stylesheets/*file               controllers.Assets.at(path="/public/stylesheets", file)
+GET     /javascripts/*file               controllers.Assets.at(path="/public/javascripts", file)
+GET     /images/*file               controllers.Assets.at(path="/public/images", file)

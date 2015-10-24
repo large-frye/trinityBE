@@ -4,9 +4,10 @@ package dao
 
 import java.sql.Timestamp
 
-import models.WorkOrder
+import models.{UserProfile, WorkOrder, User}
 
 // Play API
+
 import play.api.Play.current
 import play.api.db.DB
 import play.api.libs.json._
@@ -14,42 +15,114 @@ import play.api.libs.json.Reads._
 import play.api.libs.functional.syntax._
 
 // Scala
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+
+// Java
+import java.util._
 
 /**
  * Created by frye on 9/17/15.
  */
-object WorkOrdersDAO extends WorkOrder {
+object WorkOrdersDAO extends WorkOrder with User with UserProfile {
   val profile = slick.driver.MySQLDriver
 
   import profile.api._
 
-  /**
-   *
-   * Database
-   * @return
-   */
+  def getWorkOrderJoin = {
+    val join = for {
+      (workorder, userProfile) <- WorkOrders joinLeft UserProfiles on (_.inspectorId === _.userId)
+    } yield (workorder, userProfile.map(w => (w.firstName, w.lastName)))
+    join
+  }
 
-  def find(start: Int, limit: Int): Future[Seq[WorkOrdersDAO.WorkOrder]] = {
-    val q = WorkOrders.drop(start).take(limit)
-    try db.run(q.result)
+  /**
+   * Find all work orders
+   * @param start
+   * @param limit
+   * @return Future[Seq[(WorkOrder, Option[(Option[String], Option[String])])]]
+   */
+  def find(start: Int, limit: Int): Future[Seq[(WorkOrdersDAO.WorkOrder, Option[(Option[String], Option[String])])]] = {
+    findByDate("test")
+    val q2 = getWorkOrderJoin.sortBy(_._1.id.desc).drop(start).take(limit)
+    try db.run(q2.result)
     finally db.close
   }
 
-  def findById(id: Long): Future[Option[WorkOrdersDAO.WorkOrder]] = {
-    val query = WorkOrders.filter(_.id === id)
-    counts()
+  def findByDate(strDate: String): Unit = {
+    val calendar = Calendar.getInstance()
+    val format = new java.text.SimpleDateFormat("yyyy-MM-dd")
+    val DAY_IN_MS: Long = 1000 * 60 * 60 * 24
+
+    // First day of week
+    calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek())
+    val firstDayOfWeek: java.sql.Date = new java.sql.Date(calendar.getTime().getTime())
+
+    // Last day of week
+    calendar.set(Calendar.DAY_OF_WEEK, 7)
+    val lastDayOfWeek: java.sql.Date = new java.sql.Date(calendar.getTime().getTime())
+
+    val query = getWorkOrderJoin.filter(item =>
+      item._1.dateOfInspection >= firstDayOfWeek && item._1.dateOfInspection <= lastDayOfWeek)
+
+    try db.run(query.result)
+    finally db.close
+  }
+
+  /**
+   * Find a single work order by id
+   * @param id
+   * @return
+   */
+  def findById(id: Long): Future[Option[(WorkOrdersDAO.WorkOrder, Option[(Option[String], Option[String])])]] = {
+    val query = getWorkOrderJoin.filter(_._1.id === id)
     try db.run(query.result.headOption)
     finally db.close
   }
 
+  /**
+   * Create a new work order.
+   * @param w
+   */
   def create(w: WorkOrder): Unit = {
     val workOrderId = (WorkOrders returning WorkOrders.map(_.id)) += WorkOrder(w.id, w.workOrderType, w.userId, w.policyNumber, w.user, w.details, w.inspection, w.comments, w.commenterId, w.latitude, w.longtitude, w.pdfloc)
     db.run(workOrderId)
-    // val insertActions = DBIO.seq(WorkOrders += WorkOrder(w.id, w.workOrderType, w.userId, w.policyNumber, w.user, w.details, w.inspection, w.comments, w.commenterId, w.latitude, w.longtitude, w.pdfloc))
-    // db.run(insertActions)
   }
+
+  /**
+   * User writes for UsersDAO.User
+   */
+  implicit val userWrites: Writes[dao.WorkOrdersDAO.User] = (
+    (JsPath \ "id").write[Int] and
+      (JsPath \ "email").write[String] and
+      (JsPath \ "username").write[String] and
+      (JsPath \ "password").write[String] and
+      (JsPath \ "logins").write[Int] and
+      (JsPath \ "lastLogin").writeNullable[Int] and
+      (JsPath \ "createdOnUtc").writeNullable[Timestamp] and
+      (JsPath \ "status").writeNullable[Boolean]
+    )(unlift(WorkOrdersDAO.User.unapply))
+
+  /**
+   * User reads for UsersDAO.User
+   */
+  implicit val userReads: Reads[dao.WorkOrdersDAO.User] = (
+    (JsPath \ "id").read[Int] and
+      (JsPath \ "email").read[String] and
+      (JsPath \ "username").read[String] and
+      (JsPath \ "password").read[String] and
+      (JsPath \ "logins").read[Int] and
+      (JsPath \ "lastLogin").readNullable[Int] and
+      (JsPath \ "createdOnUtc").readNullable[Timestamp] and
+      (JsPath \ "status").readNullable[Boolean]
+    )(dao.WorkOrdersDAO.User.apply _)
+
+  /**
+   * Format combinator w/ reads and writes for a user
+   */
+  implicit val userFormat: Format[dao.WorkOrdersDAO.User] =
+    Format(userReads, userWrites)
 
   // JSON
   /**
@@ -114,7 +187,6 @@ object WorkOrdersDAO extends WorkOrder {
     )(WorkOrdersDAO.WorkOrder.apply _)
 
 
-
   implicit val WorkOrderClientWrites: Writes[WorkOrdersDAO.WorkOrderClient] = (
     (JsPath \ "firstName").writeNullable[String] and
       (JsPath \ "lastName").writeNullable[String] and
@@ -166,4 +238,28 @@ object WorkOrdersDAO extends WorkOrder {
       (JsPath \ "longtitude").writeNullable[Double] and
       (JsPath \ "pdfloc").writeNullable[String]
     )(unlift(WorkOrdersDAO.WorkOrder.unapply))
+
+  implicit val WorkOrderUserProfileWrites: Writes[WorkOrdersDAO.UserProfile] = (
+    (JsPath \ "id").write[Int] and
+      (JsPath \ "userId").write[Int] and
+      (JsPath \ "firstName").writeNullable[String] and
+      (JsPath \ "lastName").writeNullable[String] and
+      (JsPath \ "phone").writeNullable[String] and
+      (JsPath \ "geographicRegion").writeNullable[String] and
+      (JsPath \ "insuranceCompany").writeNullable[String] and
+      (JsPath \ "color").writeNullable[String]
+    )(unlift(WorkOrdersDAO.UserProfile.unapply))
+
+  implicit lazy val WorkUserProfileWrites: Writes[(WorkOrdersDAO.WorkOrder, Option[(Option[String], Option[String])])] =
+    new Writes[(WorkOrdersDAO.WorkOrder, Option[(Option[String], Option[String])])] {
+      def writes(order: (WorkOrdersDAO.WorkOrder, Option[(Option[String], Option[String])])) = Json.obj(
+        "workorder" -> order._1,
+        "inspector" -> Json.obj(
+          "firstName" -> order._2.map(firstName => firstName._1),
+          "lastName" -> order._2.map(lastName => lastName._2)
+        )
+      )
+    }
+
+
 }

@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/frye/Documents/scala/trinityBE/conf/routes
-// @DATE:Fri Oct 02 19:48:57 EDT 2015
+// @DATE:Sat Oct 03 09:26:25 EDT 2015
 
 import play.api.routing.JavaScriptReverseRoute
 import play.api.mvc.{ QueryStringBindable, PathBindable, Call, JavascriptLiteral }
@@ -14,7 +14,7 @@ import _root_.controllers.Assets.Asset
 package controllers.javascript {
   import ReverseRouteContext.empty
 
-  // @LINE:12
+  // @LINE:13
   class ReverseAssets(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -22,7 +22,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:12
+    // @LINE:13
     def at: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Assets.at",
       """
@@ -54,6 +54,16 @@ package controllers.javascript {
     }
 
   
+    // @LINE:9
+    def all: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.Workorders.all",
+      """
+        function(start,limit) {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "workorders/all/" + (""" + implicitly[PathBindable[Int]].javascriptUnbind + """)("start", start) + "/" + (""" + implicitly[PathBindable[Int]].javascriptUnbind + """)("limit", limit)})
+        }
+      """
+    )
+  
     // @LINE:8
     def find: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Workorders.find",
@@ -64,7 +74,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:9
+    // @LINE:10
     def counts: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Workorders.counts",
       """

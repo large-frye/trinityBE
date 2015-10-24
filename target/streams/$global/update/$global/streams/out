@@ -7,7 +7,7 @@
 [0m[[0mdebug[0m] [0m== resolving dependencies for trinity#trinity_2.11;1.0 [compile][0m
 [0m[[0mdebug[0m] [0m== resolving dependencies trinity#trinity_2.11;1.0->org.scala-lang#scala-library;2.11.1 [compile->default(compile)][0m
 [0m[[0minfo[0m] [0mResolving org.scala-lang#scala-library;2.11.1 ...[0m
-[0m[[0mdebug[0m] [0msbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@6665ba94[0m
+[0m[[0mdebug[0m] [0msbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@f2ccc85[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.scala-lang#scala-library;2.11.1[0m
 [0m[[0mdebug[0m] [0m	found org.scala-lang#scala-library;2.11.1 in sbt-chain[0m
 [0m[[0mdebug[0m] [0m	[2.11.1] org.scala-lang#scala-library;2.11.1[0m
@@ -434,7 +434,7 @@
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/com/google/inject/extensions/guice-assistedinject/4.0/guice-assistedinject-4.0.pom[0m
 [0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/com/google/inject/extensions/guice-assistedinject/4.0/guice-assistedinject-4.0.pom.sha1[0m
 [0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/com/google/inject/extensions/guice-assistedinject/4.0/guice-assistedinject-4.0.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] com.google.inject.extensions#guice-assistedinject;4.0!guice-assistedinject.pom(pom.original) (184ms)[0m
+[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] com.google.inject.extensions#guice-assistedinject;4.0!guice-assistedinject.pom(pom.original) (292ms)[0m
 [0m[[0minfo[0m] [0mResolving com.google.inject.extensions#extensions-parent;4.0 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: com.google.inject.extensions#extensions-parent;4.0 {}[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: com.google.inject.extensions#extensions-parent;4.0[0m
@@ -7036,7 +7036,7 @@
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-lang#scala-compiler;2.11.1!scala-compiler.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-lang.modules#scala-xml_2.11;1.0.2!scala-xml_2.11.jar(bundle)[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] jline#jline;2.11!jline.jar[0m
-[0m[[0mdebug[0m] [0m:: resolution report :: resolve 10115ms :: artifacts dl 190ms[0m
+[0m[[0mdebug[0m] [0m:: resolution report :: resolve 30027ms :: artifacts dl 721ms[0m
 [0m[[0mdebug[0m] [0m	report for trinity#trinity_2.11;1.0 compile produced in /Users/frye/Documents/scala/trinityBE/target/resolution-cache/reports/trinity-trinity_2.11-compile.xml[0m
 [0m[[0mdebug[0m] [0m	report for trinity#trinity_2.11;1.0 runtime produced in /Users/frye/Documents/scala/trinityBE/target/resolution-cache/reports/trinity-trinity_2.11-runtime.xml[0m
 [0m[[0mdebug[0m] [0m	report for trinity#trinity_2.11;1.0 test produced in /Users/frye/Documents/scala/trinityBE/target/resolution-cache/reports/trinity-trinity_2.11-test.xml[0m
@@ -7050,7 +7050,7 @@
 [0m[[0mdebug[0m] [0m	report for trinity#trinity_2.11;1.0 docs produced in /Users/frye/Documents/scala/trinityBE/target/resolution-cache/reports/trinity-trinity_2.11-docs.xml[0m
 [0m[[0mdebug[0m] [0m	report for trinity#trinity_2.11;1.0 pom produced in /Users/frye/Documents/scala/trinityBE/target/resolution-cache/reports/trinity-trinity_2.11-pom.xml[0m
 [0m[[0mdebug[0m] [0m	report for trinity#trinity_2.11;1.0 scala-tool produced in /Users/frye/Documents/scala/trinityBE/target/resolution-cache/reports/trinity-trinity_2.11-scala-tool.xml[0m
-[0m[[0mdebug[0m] [0m	resolve done (10115ms resolve - 190ms download)[0m
+[0m[[0mdebug[0m] [0m	resolve done (30027ms resolve - 721ms download)[0m
 [0m[[0minfo[0m] [0mDone updating.[0m
 [0m[[33mwarn[0m] [0mScala version was updated by one of library dependencies:[0m
 [0m[[33mwarn[0m] [0m	* org.scala-lang:scala-library:(2.11.1, 2.11.5, 2.11.0) -> 2.11.6[0m

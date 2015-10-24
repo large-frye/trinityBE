@@ -5,11 +5,13 @@ import play.api.libs.json._
 import dao.WorkOrdersDAO
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import models.Count
 
 /**
  * Created by frye on 9/17/15.
  */
-object Workorders extends Controller {
+object Workorders extends Controller with Count {
+
 
   /**
    *
@@ -64,7 +66,7 @@ object Workorders extends Controller {
   }
 
   def counts() = Action.async { request =>
-    WorkOrdersDAO.counts().map(c => Ok(Json.toJson(c)))
+	  getCounts().map(c => Ok(Json.toJson(c)))
   }
 
 }

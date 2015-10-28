@@ -25,6 +25,10 @@ object Workorders extends Controller with Count {
     WorkOrdersDAO.findById(id).map(w => Ok(Json.toJson(w)))
   }
 
+  def findByDate(interval: Int, limit: Int, start: Int, amount: Int): Action[AnyContent] = Action.async { implicit request =>
+    WorkOrdersDAO.findByDate(interval, limit, start, amount).map(orders => Ok(Json.toJson(orders)))
+  }
+
   def create() = Action.async(parse.json) { request =>
     val workOrder = request.body.validate[WorkOrdersDAO.WorkOrder]
     workOrder.fold(

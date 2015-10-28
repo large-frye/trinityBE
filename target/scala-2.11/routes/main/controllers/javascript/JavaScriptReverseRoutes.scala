@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/frye/Documents/scala/trinityBE/conf/routes
-// @DATE:Sat Oct 03 09:26:25 EDT 2015
+// @DATE:Mon Oct 26 22:05:29 EDT 2015
 
 import play.api.routing.JavaScriptReverseRoute
 import play.api.mvc.{ QueryStringBindable, PathBindable, Call, JavascriptLiteral }
@@ -14,7 +14,7 @@ import _root_.controllers.Assets.Asset
 package controllers.javascript {
   import ReverseRouteContext.empty
 
-  // @LINE:13
+  // @LINE:14
   class ReverseAssets(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -22,7 +22,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:13
+    // @LINE:14
     def at: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Assets.at",
       """
@@ -53,6 +53,16 @@ package controllers.javascript {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
+  
+    // @LINE:11
+    def findByDate: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.Workorders.findByDate",
+      """
+        function(interval,limit,start,amount) {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "workorders/date/" + (""" + implicitly[PathBindable[Int]].javascriptUnbind + """)("interval", interval) + "/" + (""" + implicitly[PathBindable[Int]].javascriptUnbind + """)("limit", limit) + "/" + (""" + implicitly[PathBindable[Int]].javascriptUnbind + """)("start", start) + "/" + (""" + implicitly[PathBindable[Int]].javascriptUnbind + """)("amount", amount)})
+        }
+      """
+    )
   
     // @LINE:9
     def all: JavaScriptReverseRoute = JavaScriptReverseRoute(

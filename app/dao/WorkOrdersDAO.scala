@@ -44,30 +44,59 @@ object WorkOrdersDAO extends WorkOrder with User with UserProfile {
    * @return Future[Seq[(WorkOrder, Option[(Option[String], Option[String])])]]
    */
   def find(start: Int, limit: Int): Future[Seq[(WorkOrdersDAO.WorkOrder, Option[(Option[String], Option[String])])]] = {
-    findByDate("test")
     val q2 = getWorkOrderJoin.sortBy(_._1.id.desc).drop(start).take(limit)
     try db.run(q2.result)
     finally db.close
   }
 
-  def findByDate(strDate: String): Unit = {
+  /**
+   *  1 = year, 2 = month, 3 = week, 4 = day
+   * @param interval
+   *  limit is determining factor once interval is found out
+   * @param limit
+   * @param start
+   * @param amount
+   */
+  def findByDate(status: Int, limit: Int, start: Int, amount: Int):
+    Future[Seq[(WorkOrdersDAO.WorkOrder, Option[(Option[String], Option[String])])]] = {
     val calendar = Calendar.getInstance()
     val format = new java.text.SimpleDateFormat("yyyy-MM-dd")
+    val year: java.util.Date = format.parse(calendar.get(Calendar.YEAR) + "-01-01")
     val DAY_IN_MS: Long = 1000 * 60 * 60 * 24
+    var query = getWorkOrderJoin
 
-    // First day of week
-    calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek())
-    val firstDayOfWeek: java.sql.Date = new java.sql.Date(calendar.getTime().getTime())
+    status match {
+      case 1 =>
+        if (limit == 1) {
+          query = getWorkOrderJoin.filter(item =>
+            item._1.dateOfInspection >= new java.sql.Date(year.getTime()))
+            .sortBy(_._1.id.desc)
+            .drop(start)
+            .take(amount)
 
-    // Last day of week
-    calendar.set(Calendar.DAY_OF_WEEK, 7)
-    val lastDayOfWeek: java.sql.Date = new java.sql.Date(calendar.getTime().getTime())
+        } else if (limit == -1) {
+          query = getWorkOrderJoin.filter(item =>
+            item._1.dateOfInspection <= new java.sql.Date(year.getTime()))
+        }
 
-    val query = getWorkOrderJoin.filter(item =>
-      item._1.dateOfInspection >= firstDayOfWeek && item._1.dateOfInspection <= lastDayOfWeek)
+    }
 
     try db.run(query.result)
     finally db.close
+
+//    // First day of week
+//    calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek())
+//    val firstDayOfWeek: java.sql.Date = new java.sql.Date(calendar.getTime().getTime())
+//
+//    // Last day of week
+//    calendar.set(Calendar.DAY_OF_WEEK, 7)
+//    val lastDayOfWeek: java.sql.Date = new java.sql.Date(calendar.getTime().getTime())
+//
+//    val query = getWorkOrderJoin.filter(item =>
+//      item._1.dateOfInspection >= firstDayOfWeek && item._1.dateOfInspection <= lastDayOfWeek)
+//
+//    try db.run(query.result)
+//    finally db.close
   }
 
   /**

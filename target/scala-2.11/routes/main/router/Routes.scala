@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/frye/Documents/scala/trinityBE/conf/routes
-// @DATE:Sat Oct 03 09:26:25 EDT 2015
+// @DATE:Mon Oct 26 22:05:29 EDT 2015
 
 package router
 
@@ -41,6 +41,7 @@ class Routes extends GeneratedRouter {
     ("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """workorders/find/$id<[^/]+>""", """controllers.Workorders.find(id:Long)"""),
     ("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """workorders/all/$start<[^/]+>/$limit<[^/]+>""", """controllers.Workorders.all(start:Int, limit:Int)"""),
     ("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """workorders/counts""", """controllers.Workorders.counts"""),
+    ("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """workorders/date/$interval<[^/]+>/$limit<[^/]+>/$start<[^/]+>/$amount<[^/]+>""", """controllers.Workorders.findByDate(interval:Int, limit:Int, start:Int, amount:Int)"""),
     ("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """stylesheets/$file<.+>""", """controllers.Assets.at(path:String = "/public/stylesheets", file:String)"""),
     ("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """javascripts/$file<.+>""", """controllers.Assets.at(path:String = "/public/javascripts", file:String)"""),
     ("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """images/$file<.+>""", """controllers.Assets.at(path:String = "/public/images", file:String)"""),
@@ -119,11 +120,28 @@ class Routes extends GeneratedRouter {
     )
   )
 
-  // @LINE:13
-  private[this] lazy val controllers_Assets_at4_route: Route.ParamsExtractor = Route("GET",
+  // @LINE:11
+  private[this] lazy val controllers_Workorders_findByDate4_route: Route.ParamsExtractor = Route("GET",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("workorders/date/"), DynamicPart("interval", """[^/]+""",true), StaticPart("/"), DynamicPart("limit", """[^/]+""",true), StaticPart("/"), DynamicPart("start", """[^/]+""",true), StaticPart("/"), DynamicPart("amount", """[^/]+""",true)))
+  )
+  private[this] lazy val controllers_Workorders_findByDate4_invoker = createInvoker(
+    controllers.Workorders.findByDate(fakeValue[Int], fakeValue[Int], fakeValue[Int], fakeValue[Int]),
+    HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.Workorders",
+      "findByDate",
+      Seq(classOf[Int], classOf[Int], classOf[Int], classOf[Int]),
+      "GET",
+      """""",
+      this.prefix + """workorders/date/$interval<[^/]+>/$limit<[^/]+>/$start<[^/]+>/$amount<[^/]+>"""
+    )
+  )
+
+  // @LINE:14
+  private[this] lazy val controllers_Assets_at5_route: Route.ParamsExtractor = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("stylesheets/"), DynamicPart("file", """.+""",false)))
   )
-  private[this] lazy val controllers_Assets_at4_invoker = createInvoker(
+  private[this] lazy val controllers_Assets_at5_invoker = createInvoker(
     controllers.Assets.at(fakeValue[String], fakeValue[String]),
     HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -136,11 +154,11 @@ class Routes extends GeneratedRouter {
     )
   )
 
-  // @LINE:14
-  private[this] lazy val controllers_Assets_at5_route: Route.ParamsExtractor = Route("GET",
+  // @LINE:15
+  private[this] lazy val controllers_Assets_at6_route: Route.ParamsExtractor = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("javascripts/"), DynamicPart("file", """.+""",false)))
   )
-  private[this] lazy val controllers_Assets_at5_invoker = createInvoker(
+  private[this] lazy val controllers_Assets_at6_invoker = createInvoker(
     controllers.Assets.at(fakeValue[String], fakeValue[String]),
     HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -153,11 +171,11 @@ class Routes extends GeneratedRouter {
     )
   )
 
-  // @LINE:15
-  private[this] lazy val controllers_Assets_at6_route: Route.ParamsExtractor = Route("GET",
+  // @LINE:16
+  private[this] lazy val controllers_Assets_at7_route: Route.ParamsExtractor = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("images/"), DynamicPart("file", """.+""",false)))
   )
-  private[this] lazy val controllers_Assets_at6_invoker = createInvoker(
+  private[this] lazy val controllers_Assets_at7_invoker = createInvoker(
     controllers.Assets.at(fakeValue[String], fakeValue[String]),
     HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -197,22 +215,28 @@ class Routes extends GeneratedRouter {
         controllers_Workorders_counts3_invoker.call(controllers.Workorders.counts)
       }
   
-    // @LINE:13
-    case controllers_Assets_at4_route(params) =>
-      call(Param[String]("path", Right("/public/stylesheets")), params.fromPath[String]("file", None)) { (path, file) =>
-        controllers_Assets_at4_invoker.call(controllers.Assets.at(path, file))
+    // @LINE:11
+    case controllers_Workorders_findByDate4_route(params) =>
+      call(params.fromPath[Int]("interval", None), params.fromPath[Int]("limit", None), params.fromPath[Int]("start", None), params.fromPath[Int]("amount", None)) { (interval, limit, start, amount) =>
+        controllers_Workorders_findByDate4_invoker.call(controllers.Workorders.findByDate(interval, limit, start, amount))
       }
   
     // @LINE:14
     case controllers_Assets_at5_route(params) =>
-      call(Param[String]("path", Right("/public/javascripts")), params.fromPath[String]("file", None)) { (path, file) =>
+      call(Param[String]("path", Right("/public/stylesheets")), params.fromPath[String]("file", None)) { (path, file) =>
         controllers_Assets_at5_invoker.call(controllers.Assets.at(path, file))
       }
   
     // @LINE:15
     case controllers_Assets_at6_route(params) =>
-      call(Param[String]("path", Right("/public/images")), params.fromPath[String]("file", None)) { (path, file) =>
+      call(Param[String]("path", Right("/public/javascripts")), params.fromPath[String]("file", None)) { (path, file) =>
         controllers_Assets_at6_invoker.call(controllers.Assets.at(path, file))
+      }
+  
+    // @LINE:16
+    case controllers_Assets_at7_route(params) =>
+      call(Param[String]("path", Right("/public/images")), params.fromPath[String]("file", None)) { (path, file) =>
+        controllers_Assets_at7_invoker.call(controllers.Assets.at(path, file))
       }
   }
 }

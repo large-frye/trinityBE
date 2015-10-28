@@ -2,14 +2,15 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET        /                           controllers.Application.index()
+GET        /                                                       controllers.Application.index()
 
 # Workorders
-GET        /workorders/find/:id        controllers.Workorders.find(id: Long)
-GET        /workorders/all/:start/:limit	controllers.Workorders.all(start: Int, limit: Int)
-GET        /workorders/counts          controllers.Workorders.counts
+GET        /workorders/find/:id                                    controllers.Workorders.find(id: Long)
+GET        /workorders/all/:start/:limit                           controllers.Workorders.all(start: Int, limit: Int)
+GET        /workorders/counts                                      controllers.Workorders.counts
+GET        /workorders/date/:interval/:limit/:start/:amount        controllers.Workorders.findByDate(interval: Int, limit: Int, start: Int, amount: Int)
 
 # Assets
-GET        /stylesheets/*file          controllers.Assets.at(path="/public/stylesheets", file)
-GET        /javascripts/*file          controllers.Assets.at(path="/public/javascripts", file)
-GET        /images/*file               controllers.Assets.at(path="/public/images", file)
+GET        /stylesheets/*file                                      controllers.Assets.at(path="/public/stylesheets", file)
+GET        /javascripts/*file                                      controllers.Assets.at(path="/public/javascripts", file)
+GET        /images/*file                                           controllers.Assets.at(path="/public/images", file)

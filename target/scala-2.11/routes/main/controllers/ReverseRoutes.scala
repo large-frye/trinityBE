@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/frye/Documents/scala/trinityBE/conf/routes
-// @DATE:Sat Oct 03 09:26:25 EDT 2015
+// @DATE:Mon Oct 26 22:05:29 EDT 2015
 
 import play.api.mvc.{ QueryStringBindable, PathBindable, Call, JavascriptLiteral }
 import play.core.routing.{ HandlerDef, ReverseRouteContext, queryString, dynamicString }
@@ -12,29 +12,29 @@ import _root_.controllers.Assets.Asset
 // @LINE:5
 package controllers {
 
-  // @LINE:13
+  // @LINE:14
   class ReverseAssets(_prefix: => String) {
     def _defaultPrefix: String = {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
   
-    // @LINE:13
+    // @LINE:14
     def at(path:String, file:String): Call = {
     
       (path: @unchecked, file: @unchecked) match {
       
-        // @LINE:13
+        // @LINE:14
         case (path, file) if path == "/public/stylesheets" =>
           implicit val _rrc = new ReverseRouteContext(Map(("path", "/public/stylesheets")))
           Call("GET", _prefix + { _defaultPrefix } + "stylesheets/" + implicitly[PathBindable[String]].unbind("file", file))
       
-        // @LINE:14
+        // @LINE:15
         case (path, file) if path == "/public/javascripts" =>
           implicit val _rrc = new ReverseRouteContext(Map(("path", "/public/javascripts")))
           Call("GET", _prefix + { _defaultPrefix } + "javascripts/" + implicitly[PathBindable[String]].unbind("file", file))
       
-        // @LINE:15
+        // @LINE:16
         case (path, file) if path == "/public/images" =>
           implicit val _rrc = new ReverseRouteContext(Map(("path", "/public/images")))
           Call("GET", _prefix + { _defaultPrefix } + "images/" + implicitly[PathBindable[String]].unbind("file", file))
@@ -51,6 +51,12 @@ package controllers {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
+  
+    // @LINE:11
+    def findByDate(interval:Int, limit:Int, start:Int, amount:Int): Call = {
+      import ReverseRouteContext.empty
+      Call("GET", _prefix + { _defaultPrefix } + "workorders/date/" + implicitly[PathBindable[Int]].unbind("interval", interval) + "/" + implicitly[PathBindable[Int]].unbind("limit", limit) + "/" + implicitly[PathBindable[Int]].unbind("start", start) + "/" + implicitly[PathBindable[Int]].unbind("amount", amount))
+    }
   
     // @LINE:9
     def all(start:Int, limit:Int): Call = {

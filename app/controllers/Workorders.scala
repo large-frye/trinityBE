@@ -12,6 +12,14 @@ import models.Count
  */
 object Workorders extends Controller with Count {
 
+  var USER_AUTHENTICATED: Boolean = false
+
+//  def getAuthenticated: Unit = {
+//    print(request2session.get("authenticated"))
+//  }
+//
+//  // Check for our user
+//  getAuthenticated
 
   /**
    *
@@ -25,8 +33,8 @@ object Workorders extends Controller with Count {
     WorkOrdersDAO.findById(id).map(w => Ok(Json.toJson(w)))
   }
 
-  def findByDate(interval: Int, limit: Int, start: Int, amount: Int): Action[AnyContent] = Action.async { implicit request =>
-    WorkOrdersDAO.findByDate(interval, limit, start, amount).map(orders => Ok(Json.toJson(orders)))
+  def findByDate(filterType: String, limit: Int, start: Int, amount: Int): Action[AnyContent] = Action.async { implicit request =>
+    WorkOrdersDAO.findByDate(filterType, limit, start, amount).map(orders => Ok(Json.toJson(orders)))
   }
 
   def create() = Action.async(parse.json) { request =>
@@ -69,8 +77,14 @@ object Workorders extends Controller with Count {
     Ok("Deleted work id" + id.toString())
   }
 
+  // Future.failed(throw new Exception("Something went wrong"))
+
   def counts() = Action.async { request =>
-	  getCounts().map(c => Ok(Json.toJson(c)))
+    request.session.get("authenticated").map { a =>
+      getCounts().map(c => Ok(Json.toJson(c)))
+    }.getOrElse {
+      Future.successful(Forbidden(Json.toJson(Map("error" -> "User is not authenticated"))))
+    }
   }
 
 }

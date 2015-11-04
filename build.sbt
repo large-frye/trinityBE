@@ -13,6 +13,7 @@ libraryDependencies ++= Seq( jdbc , cache , ws,
   "com.typesafe.play" % "play-slick_2.11" % "1.0.0",
   "org.slf4j" % "slf4j-nop" % "1.6.4",
   "mysql" % "mysql-connector-java" % "5.1.34",
+  "com.mohiva" %% "play-silhouette" % "3.0.0",
   "org.scala-lang" % "scala-reflect" % scalaVersion.value)
 
 libraryDependencies += filters
@@ -20,3 +21,5 @@ libraryDependencies += filters
 unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )  
 
 fork in run := false
+
+resolvers += "Atlassian Releases" at "https://maven.atlassian.com/public/"

@@ -6,7 +6,7 @@ object Application extends Controller {
 
   def index = Action {
     Ok("Trinity API").withSession(
-      "authenticated" -> "a.frye4@gmail.com"
+      "user" -> "a.frye4@gmail.com"
     )
   }
 

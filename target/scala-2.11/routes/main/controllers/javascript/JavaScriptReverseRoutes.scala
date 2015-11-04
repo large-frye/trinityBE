@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
-// @SOURCE:/Users/frye/Documents/scala/trinityBE/conf/routes
-// @DATE:Mon Oct 26 22:05:29 EDT 2015
+// @SOURCE:/Users/andrewfrye/Documents/trinityBE/conf/routes
+// @DATE:Mon Nov 02 21:27:57 EST 2015
 
 import play.api.routing.JavaScriptReverseRoute
 import play.api.mvc.{ QueryStringBindable, PathBindable, Call, JavascriptLiteral }
@@ -58,8 +58,8 @@ package controllers.javascript {
     def findByDate: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Workorders.findByDate",
       """
-        function(interval,limit,start,amount) {
-          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "workorders/date/" + (""" + implicitly[PathBindable[Int]].javascriptUnbind + """)("interval", interval) + "/" + (""" + implicitly[PathBindable[Int]].javascriptUnbind + """)("limit", limit) + "/" + (""" + implicitly[PathBindable[Int]].javascriptUnbind + """)("start", start) + "/" + (""" + implicitly[PathBindable[Int]].javascriptUnbind + """)("amount", amount)})
+        function(filterType,limit,start,amount) {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "workorders/date/" + (""" + implicitly[PathBindable[String]].javascriptUnbind + """)("filterType", encodeURIComponent(filterType)) + "/" + (""" + implicitly[PathBindable[Int]].javascriptUnbind + """)("limit", limit) + "/" + (""" + implicitly[PathBindable[Int]].javascriptUnbind + """)("start", start) + "/" + (""" + implicitly[PathBindable[Int]].javascriptUnbind + """)("amount", amount)})
         }
       """
     )

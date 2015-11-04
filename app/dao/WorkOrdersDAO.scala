@@ -57,7 +57,7 @@ object WorkOrdersDAO extends WorkOrder with User with UserProfile {
    * @param start
    * @param amount
    */
-  def findByDate(status: Int, limit: Int, start: Int, amount: Int):
+  def findByDate(status: String, limit: Int, start: Int, amount: Int):
     Future[Seq[(WorkOrdersDAO.WorkOrder, Option[(Option[String], Option[String])])]] = {
     val calendar = Calendar.getInstance()
     val format = new java.text.SimpleDateFormat("yyyy-MM-dd")
@@ -65,20 +65,30 @@ object WorkOrdersDAO extends WorkOrder with User with UserProfile {
     val DAY_IN_MS: Long = 1000 * 60 * 60 * 24
     var query = getWorkOrderJoin
 
+    val month = Calendar.getInstance(); // this takes current date
+
     status match {
-      case 1 =>
+      case "year" =>
         if (limit == 1) {
           query = getWorkOrderJoin.filter(item =>
-            item._1.dateOfInspection >= new java.sql.Date(year.getTime()))
-            .sortBy(_._1.id.desc)
-            .drop(start)
-            .take(amount)
+            item._1.dateOfInspection > new java.sql.Date(year.getTime())).sortBy(_._1.id.desc).drop(start).take(amount)
 
         } else if (limit == -1) {
           query = getWorkOrderJoin.filter(item =>
-            item._1.dateOfInspection <= new java.sql.Date(year.getTime()))
+            item._1.dateOfInspection < new java.sql.Date(year.getTime())).sortBy(_._1.id.desc).drop(start).take(amount)
         }
+      case "month" =>
+        if (limit == 0) {
+          month.set(Calendar.DAY_OF_MONTH, 1)
+          val firstDayOfMonth = month.getTime()
+          month.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DAY_OF_MONTH))
+          val lastDayOfMonth = month.getTime()
 
+          query = getWorkOrderJoin.filter(item =>
+            item._1.dateOfInspection >= new java.sql.Date(firstDayOfMonth.getTime()) &&
+            item._1.dateOfInspection <= new java.sql.Date(lastDayOfMonth.getTime())
+          ).sortBy(_._1.id.desc).drop(start).take(amount)
+        }
     }
 
     try db.run(query.result)

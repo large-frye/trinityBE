@@ -55,8 +55,8 @@ Seq[Any](format.raw/*1.32*/("""
 object main extends main_Scope0.main
               /*
                   -- GENERATED --
-                  DATE: Fri Oct 02 19:45:23 EDT 2015
-                  SOURCE: /Users/frye/Documents/scala/trinityBE/app/views/main.scala.html
+                  DATE: Fri Oct 30 00:28:31 EDT 2015
+                  SOURCE: /Users/andrewfrye/Documents/trinityBE/app/views/main.scala.html
                   HASH: 851874d24de8e7f14f5b0e4aa3530a79fa74ecb0
                   MATRIX: 530->1|655->31|683->33|760->84|785->89|861->138|889->145|921->150
                   LINES: 20->1|25->1|27->3|31->7|31->7|35->11|35->11|36->12

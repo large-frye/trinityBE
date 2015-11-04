@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
-// @SOURCE:/Users/frye/Documents/scala/trinityBE/conf/routes
-// @DATE:Mon Oct 26 22:05:29 EDT 2015
+// @SOURCE:/Users/andrewfrye/Documents/trinityBE/conf/routes
+// @DATE:Mon Nov 02 21:27:57 EST 2015
 
 import play.api.mvc.{ QueryStringBindable, PathBindable, Call, JavascriptLiteral }
 import play.core.routing.{ HandlerDef, ReverseRouteContext, queryString, dynamicString }
@@ -53,9 +53,9 @@ package controllers {
 
   
     // @LINE:11
-    def findByDate(interval:Int, limit:Int, start:Int, amount:Int): Call = {
+    def findByDate(filterType:String, limit:Int, start:Int, amount:Int): Call = {
       import ReverseRouteContext.empty
-      Call("GET", _prefix + { _defaultPrefix } + "workorders/date/" + implicitly[PathBindable[Int]].unbind("interval", interval) + "/" + implicitly[PathBindable[Int]].unbind("limit", limit) + "/" + implicitly[PathBindable[Int]].unbind("start", start) + "/" + implicitly[PathBindable[Int]].unbind("amount", amount))
+      Call("GET", _prefix + { _defaultPrefix } + "workorders/date/" + implicitly[PathBindable[String]].unbind("filterType", dynamicString(filterType)) + "/" + implicitly[PathBindable[Int]].unbind("limit", limit) + "/" + implicitly[PathBindable[Int]].unbind("start", start) + "/" + implicitly[PathBindable[Int]].unbind("amount", amount))
     }
   
     // @LINE:9

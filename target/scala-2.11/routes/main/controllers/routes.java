@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
-// @SOURCE:/Users/frye/Documents/scala/trinityBE/conf/routes
-// @DATE:Mon Oct 26 22:05:29 EDT 2015
+// @SOURCE:/Users/andrewfrye/Documents/trinityBE/conf/routes
+// @DATE:Mon Nov 02 21:27:57 EST 2015
 
 package controllers;
 

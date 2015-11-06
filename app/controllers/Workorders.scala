@@ -33,8 +33,8 @@ object Workorders extends Controller with Count {
     WorkOrdersDAO.findById(id).map(w => Ok(Json.toJson(w)))
   }
 
-  def findByDate(filterType: String, limit: Int, start: Int, amount: Int): Action[AnyContent] = Action.async { implicit request =>
-    WorkOrdersDAO.findByDate(filterType, limit, start, amount).map(orders => Ok(Json.toJson(orders)))
+  def findByDate(filterType: String, inspectionType: String, limit: Int, start: Int, amount: Int): Action[AnyContent] = Action.async { implicit request =>
+    WorkOrdersDAO.findByDate(filterType, inspectionType, limit, start, amount).map(orders => Ok(Json.toJson(orders)))
   }
 
   def create() = Action.async(parse.json) { request =>
@@ -80,7 +80,7 @@ object Workorders extends Controller with Count {
   // Future.failed(throw new Exception("Something went wrong"))
 
   def counts() = Action.async { request =>
-    request.session.get("authenticated").map { a =>
+    request.session.get("user").map { a =>
       getCounts().map(c => Ok(Json.toJson(c)))
     }.getOrElse {
       Future.successful(Forbidden(Json.toJson(Map("error" -> "User is not authenticated"))))

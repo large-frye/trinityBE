@@ -8,7 +8,7 @@ GET        /                                                       controllers.A
 GET        /workorders/find/:id                                    controllers.Workorders.find(id: Long)
 GET        /workorders/all/:start/:limit                           controllers.Workorders.all(start: Int, limit: Int)
 GET        /workorders/counts                                      controllers.Workorders.counts
-GET        /workorders/date/:filterType/:limit/:start/:amount      controllers.Workorders.findByDate(filterType: String, limit: Int, start: Int, amount: Int)
+GET        /workorders/date/:filterType/:inspectionType/:limit/:start/:amount      controllers.Workorders.findByDate(filterType: String, inspectionType: String, limit: Int, start: Int, amount: Int)
 
 # Assets
 GET        /stylesheets/*file                                      controllers.Assets.at(path="/public/stylesheets", file)

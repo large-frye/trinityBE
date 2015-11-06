@@ -57,15 +57,17 @@ object WorkOrdersDAO extends WorkOrder with User with UserProfile {
    * @param start
    * @param amount
    */
-  def findByDate(status: String, limit: Int, start: Int, amount: Int):
+  def findByDate(status: String, inspectionType: String, limit: Int, start: Int, amount: Int):
     Future[Seq[(WorkOrdersDAO.WorkOrder, Option[(Option[String], Option[String])])]] = {
     val calendar = Calendar.getInstance()
     val format = new java.text.SimpleDateFormat("yyyy-MM-dd")
     val year: java.util.Date = format.parse(calendar.get(Calendar.YEAR) + "-01-01")
     val DAY_IN_MS: Long = 1000 * 60 * 60 * 24
-    var query = getWorkOrderJoin
-
+    val today = new java.sql.Date(System.currentTimeMillis())
+    val yesterday = new java.sql.Date(System.currentTimeMillis() - DAY_IN_MS)
+    var tomorrow = new java.sql.Date(System.currentTimeMillis() + DAY_IN_MS)
     val month = Calendar.getInstance(); // this takes current date
+    var query = getWorkOrderJoin
 
     status match {
       case "year" =>
@@ -89,6 +91,35 @@ object WorkOrdersDAO extends WorkOrder with User with UserProfile {
             item._1.dateOfInspection <= new java.sql.Date(lastDayOfMonth.getTime())
           ).sortBy(_._1.id.desc).drop(start).take(amount)
         }
+      case "day" =>
+
+        inspectionType match {
+          case "basic" =>
+            if (limit == 0) {
+              query = findDailyOrders(getWorkOrderJoin, today, 0, start, amount)
+            } else if (limit == 1) {
+              query = findDailyOrders(getWorkOrderJoin, tomorrow, 0, start, amount)
+            } else if (limit == -1) {
+              query = findDailyOrders(getWorkOrderJoin, yesterday, 0, start, amount)
+            }
+          case "expert" =>
+            if (limit == 0) {
+              query = findDailyOrders(getWorkOrderJoin, today, 1, start, amount)
+            } else if (limit == 1) {
+              query = findDailyOrders(getWorkOrderJoin, tomorrow, 1, start, amount)
+            } else if (limit == -1) {
+              query = findDailyOrders(getWorkOrderJoin, yesterday, 1, start, amount)
+            }
+          case "total" =>
+            if (limit == 0) {
+              query = findDailyOrders(getWorkOrderJoin, today, 2, start, amount)
+            } else if (limit == 1) {
+              query = findDailyOrders(getWorkOrderJoin, tomorrow, 2, start, amount)
+            } else if (limit == -1) {
+              query = findDailyOrders(getWorkOrderJoin, yesterday, 2, start, amount)
+            }
+        }
+
     }
 
     try db.run(query.result)
@@ -107,6 +138,26 @@ object WorkOrdersDAO extends WorkOrder with User with UserProfile {
 //
 //    try db.run(query.result)
 //    finally db.close
+  }
+
+  /**
+    * Helper to filter daily workorders
+    * @param join
+    * @param date
+    * @param limit
+    * @param start
+    * @param amount
+    * @return
+    */
+  def findDailyOrders(join: Query[(WorkOrdersDAO.WorkOrders, Rep[Option[(Rep[Option[String]], Rep[Option[String]])]]), (WorkOrdersDAO.WorkOrder, Option[(Option[String], Option[String])]), Seq],
+                      date: java.sql.Date, limit: Int, start: Int, amount: Int) = {
+    if (limit != 2) {
+      join.filter(item => item._1.dateOfInspection === date && item._1.workOrderType === limit).sortBy(_._1.id.desc).drop(start).take(amount)
+    } else {
+      // We want all regardless of workOrderType
+      join.filter(item => item._1.dateOfInspection === date).sortBy(_._1.id.desc).drop(start).take(amount)
+    }
+
   }
 
   /**

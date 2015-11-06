@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/andrewfrye/Documents/trinityBE/conf/routes
-// @DATE:Mon Nov 02 21:27:57 EST 2015
+// @DATE:Wed Nov 04 23:17:21 EST 2015
 
 
 package router {
